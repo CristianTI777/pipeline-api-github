@@ -16,15 +16,39 @@ projeto_Requests/
 ├── linguagens_repos_aula1.ipynb  # Notebook de exploração e testes dos endpoints
 ├── .gitignore                    # Exclusão do ambiente virtual e caches
 └── README.md                     # Documentação do projeto
+```
 
-Etapas do Pipeline (ETL)Extração (GET + Paginação + Autenticação):
+## Etapas do Pipeline (ETL)
 
-Consumo autenticado da API REST do GitHub (api.github.com) utilizando Personal Access Token via headers.Iteração automática entre páginas (?page=1...20) para coletar todos os repositórios públicos das organizações alvo.
+1. **Extração (`GET` + Paginação + Autenticação):**
+   * Consumo autenticado da API REST do GitHub (`api.github.com`) utilizando *Personal Access Token* via `headers`.
+   * Iteração automática entre páginas (`?page=1...20`) para coletar todos os repositórios públicos das organizações alvo.
+2. **Transformação (`JSON` → `DataFrame`):**
+   * Filtragem dos campos relevantes (`name` e `language`) a partir das listas de dicionários retornadas pela API.
+   * Estruturação tabular com `pandas` e exportação para arquivos `.csv`.
+3. **Carregamento (`POST` + `Base64` + `PUT`):**
+   * Criação automatizada de repositório de destino no GitHub via requisição `POST`.
+   * Codificação binária dos arquivos `.csv` em `Base64` (`utf-8`) e envio automatizado via requisição `PUT`.
 
-Transformação (JSON $\rightarrow$ DataFrame):
-Filtragem dos campos relevantes (name e language) a partir das listas de dicionários retornadas pela API.Estruturação tabular com pandas e exportação para arquivos .csv.
+## Tecnologias Utilizadas
 
-Carregamento (POST + Base64 + PUT):
-Criação automatizada de repositório de destino no GitHub via requisição POST.Codificação binária dos arquivos .csv em Base64 (utf-8) e envio automatizado via requisição PUT.
+* **Python 3.10**
+* **Requests** (requisições HTTP `GET`, `POST`, `PUT` e `DELETE`)
+* **Pandas** (manipulação de DataFrames e geração de CSV)
+* **Base64** (codificação de arquivos para envio via API)
+* **WSL2 (Ubuntu) & VS Code**
 
-Tecnologias UtilizadasPython 3.10Requests (requisições HTTP GET, POST, PUT e DELETE)Pandas (manipulação de DataFrames e geração de CSV)Base64 (codificação de arquivos para envio via API)WSL2 (Ubuntu) & VS Code
+## Como Executar
+
+1. Clone o repositório e acesse a pasta do projeto:
+   ```bash
+   git clone https://github.com/CristianTI777/pipeline-api-github.git
+   cd pipeline-api-github
+   ```
+2. Crie e ative o ambiente virtual:
+   ```bash
+   python3 -m venv venv
+   source venv/bin/activate
+   pip install requests pandas
+   ```
+3. Insira seu *Personal Access Token* do GitHub na variável `self.access_token` nos arquivos de classe e execute os scripts Python.
